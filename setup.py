@@ -68,10 +68,10 @@ setup(
                     ],
     cmdclass={'test': PyTest},
     author_email='emcomp@uw.edu',
-    description='Twinkle - Twitter Network Analysis',
+    description='Twinkle - Twitter Analysis Toolkit',
 #    long_description=long_description,
     packages=['twinkle'],
-    include_package_data=True,
+#    include_package_data=True,
     platforms='any',
     test_suite='tests'
 )
