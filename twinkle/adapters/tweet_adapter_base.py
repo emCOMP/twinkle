@@ -54,13 +54,6 @@ class TweetAdapterBase(object):
 		"""
 		return None		
 
-
-	@property
-	def source(self):
-		"""
-		Tweet source
-		"""
-		return None
 	
 
 	@property
