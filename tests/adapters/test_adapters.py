@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 import pytest
@@ -16,6 +16,8 @@ class BaseTestAdapter:
 
 	def test_source(self, tweet):
 		assert tweet.source == 	u"<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>"
+
+	def 
 
 
 class TestCSVAdapter(BaseTestAdapter):
