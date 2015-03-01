@@ -5,7 +5,7 @@ import csv
 import cStringIO
 import codecs
 import io
-from twinkle.adapters.CSVTweet import CSVTweet
+from twinkle.adapters.csv_tweet import CSVTweet
 
 
 class UTF8Recoder:

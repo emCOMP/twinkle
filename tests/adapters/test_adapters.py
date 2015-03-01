@@ -2,9 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import pytest
+from pymongo import MongoClient
 
 from twinkle.connectors.csv_connector import CSVReader, CSVTweetReader
 from twinkle.connectors.json_connector import JSONReader, JSONTweetReader
+from twinkle.connectors.mongo_connector import MongoReader, MongoTweetReader
+
+
+
+
 
 class BaseTestAdapter:
 
@@ -17,7 +23,7 @@ class BaseTestAdapter:
 	def test_source(self, tweet):
 		assert tweet.source == 	u"<a href=\"http://twitter.com\" rel=\"nofollow\">Twitter Web Client</a>"
 
-	def 
+
 
 
 class TestCSVAdapter(BaseTestAdapter):

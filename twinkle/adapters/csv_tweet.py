@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from TweetAdapterBase import TweetAdapterBase
+from tweet_adapter_base import TweetAdapterBase
 
 
 

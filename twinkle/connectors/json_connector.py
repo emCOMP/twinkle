@@ -3,7 +3,7 @@
 
 import io
 import simplejson as json
-from twinkle.adapters.JSONTweet import JSONTweet
+from twinkle.adapters.json_tweet import JSONTweet
 
 
 class JSONReader(object):
