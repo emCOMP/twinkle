@@ -85,6 +85,8 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Libraries'
     ],
+    url = 'https://github.com/emCOMP/twinkle', # use the URL to the github repo
+    download_url = 'https://github.com/emCOMP/twinkle/tarball/' + twinkle.__version__, 
     test_suite='tests'
 )
 
