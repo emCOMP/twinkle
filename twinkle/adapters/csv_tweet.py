@@ -2,10 +2,19 @@
 # -*- coding: utf-8 -*-
 
 from tweet_adapter_base import TweetAdapterBase
+from datetime import datetime
+import email.utils
 
+def convertRFC822ToDateTime(rfc822string):
+	"""
+		convert an RFC822 date to a datetime
+	"""
+	return datetime.utcfromtimestamp(email.utils.mktime_tz(email.utils.parsedate_tz(rfc822string)))
 
 
 class CSVTweet(TweetAdapterBase):
+	ISO_8601_FMT = "YYYY-MM-DDTHH:MM:SSZ"
+
 
 	def __init__(
 			self, 
@@ -28,7 +37,12 @@ class CSVTweet(TweetAdapterBase):
 
 
 	def safe_get_int_column(self, column):
-		return int(self.row[column]) if column in self.row else None
+		val = self.safe_get_column(column)
+		return int(val) if val else None
+
+
+	def safe_get_bool_column(self, column):
+		return True if column in self.row and self.row[column] == 'True'  else False
 
 
 	@property
@@ -98,9 +112,19 @@ class CSVTweet(TweetAdapterBase):
 	@property
 	def created_at(self):
 		"""
-		Tweet creation date
+		Tweet creation date as twitter string
 		"""
-		return self.safe_get_column("created_ts")
+		return self.safe_get_column("created_at")
+
+	@property
+	def created_ts(self):
+		"""
+		return a time stamp
+		"""
+		if "created_ts" in self.row:
+			return datetime.strptime(CSVTweet.ISO_8601_FMT,self.row["created_ts"])
+		return convertRFC822ToDateTime(self.row["created_at"])
+	
 
 
 
@@ -117,7 +141,7 @@ class CSVTweet(TweetAdapterBase):
 		"""
 		Tweet retweet count
 		"""
-		return self.safe_get_int_column("retweet_count") if self.has_retweet else None
+		return self.safe_get_int_column("retweet_count")
 
 
 	@property
@@ -187,14 +211,26 @@ class CSVTweet(TweetAdapterBase):
 		"""
 		User's creation date
 		"""
-		return self.safe_get_column("user.created_ts")
+		return self.safe_get_column("user.created_at")
+
+
+	@property
+	def user_created_ts(self):
+		"""
+		User's creation date as date time
+		"""
+		if "user.created_ts" in self.row:
+			return datetime.strptime(CSVTweet.ISO_8601_FMT,self.row["user.created_ts"])
+		return convertRFC822ToDateTime(self.row["user.created_at"])
+
+	
 
 	@property
 	def user_verified(self):
 		"""
 		User's verification status
 		"""
-		return self.safe_get_column("user.verified")
+		return self.safe_get_bool_column("user.verified")
 
 
 	@property
@@ -206,11 +242,11 @@ class CSVTweet(TweetAdapterBase):
 
 
 	@property
-	def user_favorites_count(self):
+	def user_favourites_count(self):
 		"""
-		User's count of favorites
+		User's count of favourites
 		"""
-		return self.safe_get_int_column("user.favorites_count")
+		return self.safe_get_int_column("user.favourites_count")
 
 
 
@@ -256,7 +292,7 @@ class CSVTweet(TweetAdapterBase):
 
 
 	@property
-	def user_utf_offset(self):
+	def user_utc_offset(self):
 		"""
 		UTC offset of user's profile
 		"""
@@ -277,24 +313,62 @@ class CSVTweet(TweetAdapterBase):
 		"""
 		Tweet hashtags
 		"""
-		if self._hashtags:
+		if hasattr(self, "_hashtags"):
 			return self._hashtags
 		else:
 			self._hashtags = [self.row["entities.hashtags.%d.text"%i] for i in range(self.max_hashtags)]
 			return self._hashtags
 
-
+	@property
+	def hashtags_text_list(self):
+		"""
+		returns a list of only the hashtag text for each hashtag
+		"""
+		if hasattr(self, "_hashtags"):
+			return self._hashtags
+		else:
+			self._hashtags = [self.row["entities.hashtags.%d.text"%i] for i in range(self.max_hashtags)]
+			return self._hashtags
 
 	@property
 	def mentions(self):
 		"""
 		Tweet mentions
 		"""
-		if self._mentions:
+		if hasattr(self, "_mentions"):
 			return self._mentions
 		else:
-			self._mentions = [self.row["entities.user_mentions.%d.text"%i] for i in range(self.max_mentions)]
+			self._mentions = [self.row["entities.user_mentions.%d.screen_name"%i] for i in range(self.max_mentions)]
 			return self._mentions
+
+	@property
+	def mentions_text_list(self):
+		"""
+		Tweet mentions
+		"""
+		if hasattr(self, "_mentions"):
+			return self._mentions
+		else:
+			self._mentions = [self.row["entities.user_mentions.%d.screen_name"%i] for i in range(self.max_mentions)]
+			return self._mentions
+
+	@property
+	def mentions_id_and_screen_name(self):
+		"""
+		returns a list of mentions with the mentioned user's id and their screen_name
+		"""
+		if hasattr(self, "_id_mentions"):
+			return self._id_mentions
+		else:
+			id_str = "entities.user_mentions.%d.id"
+			name_str = "entities.user_mentions.%d.screen_name"
+			self._id_mentions = []
+			for i in range(self.max_mentions):
+				mention_id = self.safe_get_int_column(id_str%i)
+				mention_screen_name = self.safe_get_column(name_str%i)
+				if mention_id is not None and mention_screen_name:
+					self._id_mentions.append((mention_id, mention_screen_name))
+			return self._id_mentions
 
 
 

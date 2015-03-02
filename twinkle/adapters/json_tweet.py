@@ -2,7 +2,14 @@
 # -*- coding: utf-8 -*-
 
 from tweet_adapter_base import TweetAdapterBase
+from datetime import datetime
+import email.utils
 
+def convertRFC822ToDateTime(rfc822string):
+	"""
+		convert an RFC822 date to a datetime
+	"""
+	return datetime.utcfromtimestamp(email.utils.mktime_tz(email.utils.parsedate_tz(rfc822string)))
 
 
 class JSONTweet(TweetAdapterBase):
@@ -84,10 +91,20 @@ class JSONTweet(TweetAdapterBase):
 	@property
 	def created_at(self):
 		"""
-		Tweet creation date
+		Tweet creation date in twitter formatted string
 		"""
-		return self.obj["created_ts"]
+		return self.obj["created_at"]
 
+
+	@property
+	def created_ts(self):
+		"""
+		Tweet creation date as timestamp
+		"""
+		if "created_ts" in self.obj:
+			return self.obj["created_ts"]
+		else:
+			return convertRFC822ToDateTime(self.obj["created_at"])
 
 
 	@property
@@ -120,7 +137,10 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		if retweet, original tweet id
 		"""
-		return self.obj["retweeted_status"]["id"]
+		if "retweeted_status" in self.obj:
+			return self.obj["retweeted_status"]["id"]
+		return None
+
 
 
 	@property
@@ -128,14 +148,18 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		if retweet, original tweet user's screen name
 		"""
-		return self.obj["retweeted_status"]["user"]["screen_name"]
+		if "retweeted_status" in self.obj:
+			return self.obj["retweeted_status"]["user"]["screen_name"]
+		return None
 
 	@property
 	def retweet_of_user_id(self):
 		"""
 		if retweet, original tweet user's id
 		"""
-		return self.obj["retweeted_status"]["user"]["id"]
+		if "retweeted_status" in self.obj:
+			return self.obj["retweeted_status"]["user"]["id"]
+		return None
 
 
 	#
@@ -149,7 +173,7 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		Tweet user id
 		"""
-		return self.obj["user.id"]
+		return self.obj["user"]["id"]
 
 
 	@property
@@ -157,7 +181,7 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		Tweet user name
 		"""
-		return self.obj["user.name"]
+		return self.obj["user"]["name"]
 
 
 	@property
@@ -165,22 +189,34 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		Tweet user screen name
 		"""
-		return self.obj["user.screen_name"]
+		return self.obj["user"]["screen_name"]
 
 
 	@property
 	def user_created_at(self):
 		"""
-		User's creation date
+		User's creation date as a twitter formatted string
 		"""
-		return self.obj["user.created_ts"]
+		return self.obj["user"]["created_at"]
+
+	@property
+	def user_created_ts(self):
+		"""
+		User's creation date as a timestamp
+		"""
+		if "created_ts" in self.obj["user"]:
+			return self.obj["user"]["created_ts"]
+		else:
+			return convertRFC822ToDateTime(self.obj["user"]["created_at"])
+
+
 
 	@property
 	def user_verified(self):
 		"""
 		User's verification status
 		"""
-		return self.obj["user.verified"]
+		return self.obj["user"]["verified"]
 
 
 	@property
@@ -188,15 +224,15 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		User's description
 		"""
-		return self.obj["user.description"]
+		return self.obj["user"]["description"]
 
 
 	@property
-	def user_favorites_count(self):
+	def user_favourites_count(self):
 		"""
 		User's count of favorites
 		"""
-		return self.obj["user.favorites_count"]
+		return self.obj["user"]["favourites_count"]
 
 
 
@@ -205,7 +241,7 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		User's count of followers
 		"""
-		return self.obj["user.followers_count"]
+		return self.obj["user"]["followers_count"]
 
 
 	@property
@@ -213,7 +249,7 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		User's friends count
 		"""
-		return self.obj["user.friends_count"]
+		return self.obj["user"]["friends_count"]
 
 
 
@@ -222,7 +258,7 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		Number of lists the user is on 
 		"""
-		return self.obj["user.listed_count"]
+		return self.obj["user"]["listed_count"]
 
 
 	@property
@@ -230,7 +266,7 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		Number of status user has 
 		"""
-		return self.obj["user.statuses_count"]
+		return self.obj["user"]["statuses_count"]
 
 
 	@property
@@ -238,15 +274,15 @@ class JSONTweet(TweetAdapterBase):
 		"""
 		User's listed url
 		"""
-		return self.obj["user.url"]
+		return self.obj["user"]["url"]
 
 
 	@property
-	def user_utf_offset(self):
+	def user_utc_offset(self):
 		"""
 		UTC offset of user's profile
 		"""
-		return self.obj["user.utc_offset"]
+		return self.obj["user"]["utc_offset"]
 
 
 
@@ -266,11 +302,32 @@ class JSONTweet(TweetAdapterBase):
 		return self.obj["entities"]["hashtags"]
 
 	@property
+	def hashtags_text_list(self):
+		"""
+		returns a list of only the hashtag text for each hashtag
+		"""
+		return [h['text'] for h in self.obj["entities"]["hashtags"]]
+
+	@property
 	def mentions(self):
 		"""
 		Tweet mentions
 		"""
-		return self.obj["entities"]["mentions"]
+		return self.obj["entities"]["user_mentions"]
+
+	@property
+	def mentions_text_list(self):
+		"""
+		returns a list of only the mention screen names
+		"""
+		return [m['screen_name'] for m in self.obj["entities"]["user_mentions"]]
+
+	@property
+	def mentions_id_and_screen_name(self):
+		"""
+		returns a list of mentions with the mentioned user's id and their screen_name
+		"""
+		return [(m['id'], m['screen_name']) for m in self.obj["entities"]["user_mentions"]]		
 
 	@property
 	def urls(self):
@@ -278,6 +335,13 @@ class JSONTweet(TweetAdapterBase):
 		Tweet urls
 		"""
 		return self.obj["entities"]["urls"]
+
+	@property
+	def urls_simple_list(self):
+		"""
+		returns a list of pairs of urls (url, expanded_url)
+		"""
+		return None		
 
 
 	@property
@@ -288,7 +352,13 @@ class JSONTweet(TweetAdapterBase):
 		return self.obj["entities"]["media"]
 
 
+	@property
+	def media_simple_list(self):
+		"""
+		returns a list of pairs of urls (url, expanded_url)
+		"""
 
+		return [(m['url'], m['media_url']) for m in self.obj["entities"]["media"]]
 
 
 

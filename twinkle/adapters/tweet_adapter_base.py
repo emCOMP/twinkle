@@ -67,10 +67,16 @@ class TweetAdapterBase(object):
 	@property
 	def created_at(self):
 		"""
-		Tweet creation date
+		Tweet creation date in Twitter format as a string
 		"""
 		return None
 
+	@property
+	def created_ts(self):
+		"""
+		Tweet creation date as a datetime object
+		"""
+		return None
 
 	@property
 	def lang(self):
@@ -94,6 +100,13 @@ class TweetAdapterBase(object):
 		Tweet favorite count
 		"""
 		return None
+
+	@property
+	def favourite_count(self):
+		"""
+		alias for favorite_count
+		"""
+		return self.favorite_count
 
 
 	@property
@@ -153,7 +166,13 @@ class TweetAdapterBase(object):
 	@property
 	def user_created_at(self):
 		"""
-		User's creation date
+		User's creation date as original twitter string
+		"""
+		return None
+
+	def user_created_ts(self):
+		"""
+		User's creation date as a timestamp
 		"""
 		return None
 
@@ -174,11 +193,18 @@ class TweetAdapterBase(object):
 
 
 	@property
-	def user_favorites_count(self):
+	def user_favourites_count(self):
 		"""
-		User's count of favorites
+		User's count of favourites
 		"""
 		return None
+
+	@property
+	def user_favorites_count(self):
+		"""
+		alias for favourites count
+		"""
+		return self.user_favourites_count
 
 
 
@@ -223,7 +249,7 @@ class TweetAdapterBase(object):
 
 
 	@property
-	def user_utf_offset(self):
+	def user_utc_offset(self):
 		"""
 		UTC offset of user's profile
 		"""
@@ -242,16 +268,35 @@ class TweetAdapterBase(object):
 	@property
 	def hashtags(self):
 		"""
-		Tweet hashtags
+		Tweet hashtags in its raw format
 		"""
 		return None
 
-
+	@property
+	def hashtags_text_list(self):
+		"""
+		returns a list of only the hashtag text for each hashtag
+		"""
+		return None
 
 	@property
 	def mentions(self):
 		"""
 		Tweet mentions
+		"""
+		return None
+
+	@property
+	def mentions_text_list(self):
+		"""
+		returns a list of only the mention screen names
+		"""
+		return None
+
+	@property
+	def mentions_id_and_screen_name(self):
+		"""
+		returns a list of mentions with the mentioned user's id and their screen_name
 		"""
 		return None
 
@@ -263,12 +308,27 @@ class TweetAdapterBase(object):
 		"""
 		return None
 
+	@property
+	def urls_simple_list(self):
+		"""
+		returns a list of pairs of urls (url, expanded_url)
+		"""
+		return None
+
 
 	@property
 	def media(self):
 		"""
-		Tweet urls
+		Tweet urls objects in raw format
 		"""
+		return None
+
+	@property
+	def media_simple_list(self):
+		"""
+		returns a list of pairs of urls (url, expanded_url)
+		"""
+
 		return None
 
 
