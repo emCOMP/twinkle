@@ -59,7 +59,6 @@ class PyTest(TestCommand):
 setup(
     name='twinkle',
     version=twinkle.__version__,
-    url='https://depts.washington.edu/emcomp/',
     license='MIT',
     author='emComp Lab',
     tests_require=['pytest'],
@@ -85,7 +84,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Topic :: Software Development :: Libraries'
     ],
-    url = 'https://github.com/emCOMP/twinkle', # use the URL to the github repo
+    url = 'https://github.com/emCOMP/twinkle',
     download_url = 'https://github.com/emCOMP/twinkle/tarball/' + twinkle.__version__, 
     test_suite='tests'
 )
