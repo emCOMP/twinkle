@@ -90,7 +90,7 @@ class TestCSVAdapter(BaseTestAdapter):
 	@pytest.fixture
 	def tweet(self, request):
 
-		csv_reader = CSVTweetReader("tests/data/test_tweet.csv", encoding="utf-8")
+		csv_reader = CSVTweetReader("tests/data/test_tweet.csv", encoding="utf-8", max_hashtags=5, max_mentions=5, max_urls=5, max_media=5)
 
 		def fin():
 			csv_reader.close()

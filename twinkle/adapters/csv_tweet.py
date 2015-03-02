@@ -316,7 +316,14 @@ class CSVTweet(TweetAdapterBase):
 		if hasattr(self, "_hashtags"):
 			return self._hashtags
 		else:
-			self._hashtags = [self.row["entities.hashtags.%d.text"%i] for i in range(self.max_hashtags)]
+			self._hashtags = []
+			for i in range(self.max_hashtags):
+				col = "entities.hashtags.%d.text"%i
+				if col in self.row:
+					self._hashtags.append(self.row[col])
+				else:
+					break
+
 			return self._hashtags
 
 	@property
@@ -327,7 +334,14 @@ class CSVTweet(TweetAdapterBase):
 		if hasattr(self, "_hashtags"):
 			return self._hashtags
 		else:
-			self._hashtags = [self.row["entities.hashtags.%d.text"%i] for i in range(self.max_hashtags)]
+			self._hashtags = []
+			for i in range(self.max_hashtags):
+				col = "entities.hashtags.%d.text"%i
+				if col in self.row:
+					self._hashtags.append(self.row[col])
+				else:
+					break
+
 			return self._hashtags
 
 	@property
@@ -338,7 +352,14 @@ class CSVTweet(TweetAdapterBase):
 		if hasattr(self, "_mentions"):
 			return self._mentions
 		else:
-			self._mentions = [self.row["entities.user_mentions.%d.screen_name"%i] for i in range(self.max_mentions)]
+			self._mentions = []
+			for i in range(self.max_mentions):
+				col = "entities.user_mentions.%d.screen_name"%i
+				if col in self.row:
+					self._mentions.append(self.row[col])
+				else:
+					break
+
 			return self._mentions
 
 	@property
@@ -349,8 +370,16 @@ class CSVTweet(TweetAdapterBase):
 		if hasattr(self, "_mentions"):
 			return self._mentions
 		else:
-			self._mentions = [self.row["entities.user_mentions.%d.screen_name"%i] for i in range(self.max_mentions)]
+			self._mentions = []
+			for i in range(self.max_mentions):
+				col = "entities.user_mentions.%d.screen_name"%i
+				if col in self.row:
+					self._mentions.append(self.row[col])
+				else:
+					break
+
 			return self._mentions
+
 
 	@property
 	def mentions_id_and_screen_name(self):
