@@ -79,11 +79,12 @@ setup(
         'Environment :: Console',
         'Intended Audience :: Developers',
         'Natural Language :: English',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: MIT License',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
-        'Topic :: Software Development',
+        'Topic :: Software Development :: Libraries'
     ],
     test_suite='tests'
 )
+
