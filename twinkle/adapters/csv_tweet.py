@@ -13,7 +13,7 @@ def convertRFC822ToDateTime(rfc822string):
 
 
 class CSVTweet(TweetAdapterBase):
-	ISO_8601_FMT = "YYYY-MM-DDTHH:MM:SSZ"
+	ISO_8601_FMT = "%Y-%m-%dT%H:%M:%SZ"
 
 
 	def __init__(
@@ -122,7 +122,7 @@ class CSVTweet(TweetAdapterBase):
 		return a time stamp
 		"""
 		if "created_ts" in self.row:
-			return datetime.strptime(CSVTweet.ISO_8601_FMT,self.row["created_ts"])
+			return datetime.strptime(self.row["created_ts"], CSVTweet.ISO_8601_FMT)
 		return convertRFC822ToDateTime(self.row["created_at"])
 	
 
