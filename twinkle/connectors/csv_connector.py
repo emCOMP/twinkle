@@ -6,6 +6,7 @@ import cStringIO
 import codecs
 import io
 from twinkle.adapters.csv_tweet import CSVTweet
+from core import register_connector
 
 
 class UTF8Recoder:
@@ -48,7 +49,7 @@ class UnicodeWriter:
     which is encoded in the given encoding.
     """
 
-    def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
+    def __init__(self, f, dialect="excel", encoding="utf-8", **kwds):
         # Redirect output to a queue
         self.queue = cStringIO.StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
@@ -73,10 +74,27 @@ class UnicodeWriter:
 
 
 
+@register_connector
 class CSVReader(object):
     """
     Simple CSVReader
     """
+
+    @classmethod
+    def createFromDictionary(self, config_data):
+        """
+        creates an instance from a configuration file.
+
+        P
+        """
+        # clone the dictionary
+        data = dict(config_data)
+
+        # save and remove the filename
+        filename = data["filename"]
+        del data["filename"]
+
+        return self(**config_data)
 
 
     def __init__(self, filename, encoding = "utf-8"):
@@ -125,6 +143,7 @@ class CSVReader(object):
 
 
 
+@register_connector
 class CSVTweetReader(CSVReader):
     """
     """
@@ -150,5 +169,32 @@ class CSVTweetReader(CSVReader):
                 max_urls = self.max_urls,
                 max_media = self.max_media
                  )
+
+
+
+
+@register_connector
+class CSVWriter(object):
+    """
+    """
+
+    def __init__(self, filename, encoding = "utf-8"):
+        self.file = open(filename, "w")
+        self.csv_writer = UnicodeWriter(self.file, encoding=encoding)
+        self.header_written = False
+
+
+    def write(self, data_dictionary):
+        # write header for the first row
+        if self.header_written == False:
+            headers = [s for s in data_dictionary.keys()]
+            self.csv_writer.writerow(headers)
+            self.header_written = True
+
+        # write data entry
+        self.csv_writer.writerow([str(s) for s in data_dictionary.values()])
+
+    def __del__(self):
+        self.file.close()
 
 

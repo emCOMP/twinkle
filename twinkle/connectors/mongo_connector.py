@@ -4,9 +4,10 @@
 import io
 import simplejson as json
 from twinkle.adapters.json_tweet import JSONTweet
+from core import register_connector
 from pymongo import MongoClient
 
-
+@register_connector
 class MongoReader(object):
     """
     Mongo Reader
@@ -67,7 +68,7 @@ class MongoReader(object):
 
 
 
-
+@register_connector
 class MongoTweetReader(MongoReader):
     """
     """

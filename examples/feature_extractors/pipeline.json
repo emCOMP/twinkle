@@ -1,0 +1,39 @@
+{
+	"input" : {
+		"name": "CSVTweetReader",
+		"config": {
+			"filename": "../../tests/data/test_tweet.csv",
+			"encoding": "utf-8",
+			"max_hashtags":5,
+			"max_mentions":5,
+			"max_urls":5,
+			"max_media":5
+		}
+	},
+	"output" : {
+		"name": "CSVWriter",
+		"config": {
+			"filename": "output.csv",
+			"encoding": "utf-8"
+		}
+	},
+	"dependencies": [
+	],
+	"extractors": [
+		{
+			"name": "PropertyExtractor",
+			"config": {
+				"properties": [
+					{
+						"property_name": "user_screen_name",
+						"output_name": "screen_name"	
+					},
+					{
+						"property_name": "user_statuses_count",
+						"output_name": "status_count"
+					}
+				]
+			}
+		}
+	]
+}

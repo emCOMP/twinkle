@@ -4,8 +4,9 @@
 import io
 import simplejson as json
 from twinkle.adapters.json_tweet import JSONTweet
+from core import register_connector
 
-
+@register_connector
 class JSONReader(object):
     """
     Simple JSON Reader
@@ -52,6 +53,7 @@ class JSONReader(object):
             yield json.loads(line)
 
 
+@register_connector
 class JSONTweetReader(JSONReader):
     """
     """
