@@ -70,3 +70,19 @@ class JSONTweetReader(JSONReader):
             yield JSONTweet(tweet)
             
 
+
+@register_connector
+class JSONWriter(object):
+    """
+    """
+
+    def __init__(self, filename, encoding="utf-8"):
+        self.file = io.open(filename, encoding=encoding)
+
+
+    def write(self, data_dictionary):
+        self.file.write(json.dumps(data_dictionary) + "\n")
+
+    def __del__(self):
+        self.file.close()
+
