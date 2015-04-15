@@ -406,7 +406,7 @@ class CSVTweet(TweetAdapterBase):
 		"""
 		Tweet urls
 		"""
-		if self._urls:
+		if hasattr(self, "_urls"):
 			return self._urls
 		else:
 			self._urls = [self.row["entities.urls.%d.text"%i] for i in range(self.max_urls)]
@@ -419,7 +419,7 @@ class CSVTweet(TweetAdapterBase):
 		"""
 		Tweet urls
 		"""
-		if self._media:
+		if hasattr(self, "_media"):
 			return self._media
 		else:
 			self._media = [self.row["entities.media.%d.url"%i] for i in range(self.max_media)]
