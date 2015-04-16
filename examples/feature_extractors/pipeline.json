@@ -31,10 +31,6 @@
 					{
 						"property_name": "user_statuses_count",
 						"output_name": "status_count"
-					},
-					{
-						"property_name": "in_reply_to_status_id",
-						"output_name": "my_new_name"
 					}
 				]
 			}
@@ -46,7 +42,7 @@
 		    }
 		},
 		{
-			"name": "WordCountExtractor",
+			"name": "WordFeaturesExtractor",
 			"config": {
 
 			}

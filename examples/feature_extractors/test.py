@@ -58,7 +58,7 @@ class TweetLengthExtractor(object):
 		output["tweet_length_no_spaces"] = len(data.text.replace(" ", ""))
 
 @register_feature_extractor
-class WordCountExtractor(object):
+class WordFeaturesExtractor(object):
 
 	def __init__(self):
 		self.word_groups = []
@@ -68,11 +68,27 @@ class WordCountExtractor(object):
 			self.word_groups = config_data["word_groups"]
 
 	def extract(self, data, cookie, output):
-		"""
-		extract
-		"""
 
-		output["word_count"] = len(data.text.split(" "))
+		#get a list of words
+		word_list = data.text.split(" ")
+
+		cum_word_length = 0
+		max_word_length = 0
+
+		#loop through the words in the list
+		for word in word_list:
+			#get length of the word
+			word_length = len(word)
+			cum_word_length += word_length
+
+			#check if this word is longe than the longest so far
+			if word_length>max_word_length:
+				#set the new max length of the word if it is
+				max_word_length = word_length
+
+		output["word_count"] = len(word_list)
+		output["average_word_length"] = cum_word_length/len(word_list)
+		output["max_word_length"] = max_word_length
 
 
 with open("pipeline.json") as f:
