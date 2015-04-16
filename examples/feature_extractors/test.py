@@ -58,6 +58,28 @@ class TweetLengthExtractor(object):
 		output["tweet_length_no_spaces"] = len(data.text.replace(" ", ""))
 
 @register_feature_extractor
+class CharacterCountsExtractor(object):
+
+	def __init__(self):
+		self.word_groups = []
+
+	def configure(self, config_data):
+		if "word_groups" in config_data:
+			self.word_groups = config_data["word_groups"]
+
+	def extract(self, data, cookie, output):
+		"""
+		extract
+		"""
+		text_upper = data.text.upper()
+
+		output["hashtags_counts"] = data.text.count('#')
+		output["url_counts"] = text_upper.count('HTTP')
+		output["exclamation_counts"] = data.text.count('!')
+
+
+
+@register_feature_extractor
 class WordFeaturesExtractor(object):
 
 	def __init__(self):

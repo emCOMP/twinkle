@@ -42,6 +42,12 @@
 		    }
 		},
 		{
+			"name": "CharacterCountsExtractor",
+			"config": {
+
+			}
+		},
+		{
 			"name": "WordFeaturesExtractor",
 			"config": {
 

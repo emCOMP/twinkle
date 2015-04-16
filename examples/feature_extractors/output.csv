@@ -1,2 +1,2 @@
-average_word_length,screen_name,max_word_length,tweet_length_no_spaces,word_count,status_count,tweet_length_with_spaces
-7,soco_research,22,121,17,4,137
+average_word_length,screen_name,url_counts,max_word_length,tweet_length_no_spaces,word_count,exclamation_counts,hashtags_counts,status_count,tweet_length_with_spaces
+7,soco_research,2,22,121,17,0,3,4,137
