@@ -7,7 +7,6 @@ from twinkle.feature_extraction.core import FeatureExtractorBase, register_featu
 from twinkle.feature_extraction.pipelines import FeatureExtractorPipelineFactory
 from twinkle.connectors.csv_connector import CSVReader, CSVTweetReader
 from twinkle.connectors.json_connector import JSONReader, JSONTweetReader
-from twinkle.connectors.mongo_connector import MongoReader, MongoTweetReader
 
 from twinkle.connectors.core import ConnectorRegistry
 
@@ -37,9 +36,26 @@ class PropertyExtractor(object):
 		"""
 
 		for prop in self.props:
-			value = getattr(data, prop["property_name"])
-			output[ prop["output_name"] ] = value if value is not None else ""
+			output[ prop["output_name"] ] = getattr(data, prop["property_name"])
 
+
+@register_feature_extractor
+class TweetLengthExtractor(object):
+
+	def __init__(self):
+		self.word_groups = []
+
+	def configure(self, config_data):
+		if "word_groups" in config_data:
+			self.word_groups = config_data["word_groups"]
+
+	def extract(self, data, cookie, output):
+		"""
+		extract
+		"""
+
+		output["tweet_length_with_spaces"] = len(data.text)
+		output["tweet_length_no_spaces"] = len(data.text.replace(" ", ""))
 
 @register_feature_extractor
 class WordCountExtractor(object):
@@ -58,10 +74,6 @@ class WordCountExtractor(object):
 
 		output["word_count"] = len(data.text.split(" "))
 
-
-
-
-ConnectorRegistry.dumpRegisteredConnectors()
 
 with open("pipeline.json") as f:
 	pipeline_conf = json.load(f)

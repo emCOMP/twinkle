@@ -40,6 +40,12 @@
 			}
 		},
 		{
+		    "name": "TweetLengthExtractor",
+		    "config": {
+
+		    }
+		},
+		{
 			"name": "WordCountExtractor",
 			"config": {
 
